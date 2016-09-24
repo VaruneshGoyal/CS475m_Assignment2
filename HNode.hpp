@@ -1,7 +1,6 @@
 #include <iostream>
 #include <GL/glut.h>
 #include <vector>
-#include <tuple>
 
 #ifndef _HNODE_HPP_
 #define _HNODE_HPP_
@@ -20,6 +19,15 @@ private:
   std::vector<HNode*> children;		//vector containing pointers to children nodes
   HNode* parent;					//pointer to parent node
 
+  
+
+  
+  //default = -1
+  //0 - cylinder
+  //1 - cuboid
+  //2 - torus
+
+public:
   GLUquadric* quad;
   GLdouble base;
   GLdouble inRadius;
@@ -30,15 +38,12 @@ private:
   GLint nsides;
   GLint stacks;
   GLint rings;
+  float cuboid_height, cuboid_length, cuboid_breadth;
+  int obj_type;
 
-  int obj;
-  //0 - cylinder - default
-  //1 - cuboid
-  //2 - torus
 
-public:
   // HNode (HNode* parent, int num_vertices, float pos_v4[][4],  float col_v4[][4]);		//default constructor of the node
-  HNode (HNode* parent);
+  HNode (HNode* par);
   void add_child(HNode*);		//function to add a child node to this node
   void render();				//function to render(create) this node
   void change_parameters(float tx,float ty,float tz,float rx,float ry,float rz);		//change parameters of this node - rotate/translate it
