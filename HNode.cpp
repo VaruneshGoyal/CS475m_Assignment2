@@ -1,10 +1,12 @@
 #include "HNode.hpp"
 
-void vertexcopy(float *src,float *dest){
+
+
+//agscvx<sdhvcjdv
+
+// void vertexcopy(float *src,float *dest){
   dest[0]=src[0];
   dest[1]=src[1];
-  dest[2]=src[2];
-  dest[3]=src[3];
 }
 
 HNode::HNode(HNode* parent){
