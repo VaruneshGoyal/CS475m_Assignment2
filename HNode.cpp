@@ -14,6 +14,9 @@ HNode::HNode(HNode* par){
   rx = 0;
   ry = 0;
   rz = 0;
+  ptx=pty=ptz=0;
+
+  R=G=B=0;
 
   if(par!=NULL){
     parent=par;
@@ -41,6 +44,8 @@ void HNode::render(){
   glRotatef(rx, 1.0, 0.0, 0.0);
   glRotatef(ry, 0.0, 1.0, 0.0);
   glRotatef(rz, 0.0, 0.0, 1.0);
+  //Translate before rotation(if any)
+  glTranslatef(ptx,pty,ptz);
 
   if(obj_type == 0){
     // glu
@@ -132,7 +137,11 @@ void HNode::render(){
   }
 }
 
-
+void HNode::set_color(float R, float G, float B){
+  this->R = R;
+  this->G = G;
+  this->B = B;
+}
 
 void HNode::change_parameters(float tx,float ty,float tz,float rx,float ry,float rz){
   this->tx=tx;
@@ -143,6 +152,12 @@ void HNode::change_parameters(float tx,float ty,float tz,float rx,float ry,float
   this->rz=rz;
 }
 
+void HNode::change_preparameters(float ptx, float pty, float ptz){
+  this->ptx = ptx;
+  this->pty = pty;
+  this->ptz = ptz;
+}
+
 void HNode::render_tree(){
   glPushMatrix();
   // glBegin(GL_POINTS);
@@ -151,6 +166,7 @@ void HNode::render_tree(){
   //   // glVertex3f(-0.5f, -0.5f, 0.0f);
   //   glVertex3f(0,0,0);
   // glEnd();
+  glColor3f(R,G,B);
   render();
   for(int i=0;i<children.size();i++){
     children[i]->render_tree();
