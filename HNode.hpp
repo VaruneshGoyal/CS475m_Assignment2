@@ -27,6 +27,8 @@ public:
 
   float tx,ty,tz;   //translation from its origin
   float rx,ry,rz;   //rotation about x, y, z
+  float ptx,pty,ptz;  //translation before rotation needed in some cases simplifies stuff
+  float R,G,B;
   
   GLUquadric* quad;
   GLdouble base;
@@ -47,7 +49,9 @@ public:
   void add_child(HNode*);		//function to add a child node to this node
   void render();				//function to render(create) this node
   void change_parameters(float tx,float ty,float tz,float rx,float ry,float rz);		//change parameters of this node - rotate/translate it
+  void change_preparameters(float ptx, float pty, float ptz);
   void render_tree();			//function to render the whole tree - this + children (NOT parents)
+  void set_color(float R, float G, float B);
   // void (*render_function)();
 
   // void make_cuboid();
