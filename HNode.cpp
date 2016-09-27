@@ -49,8 +49,13 @@ void HNode::render(){
   }
   else if(obj_type == 1){
     //cuboid
+
+    // //to draw unfilled cuboid
+    // glClear(GL_COLOR_BUFFER_BIT);
+    // glMatrixMode( GL_PROJECTION );
+    // glLineWidth(5);
+
     glBegin(GL_QUADS);
-      glBegin(GL_QUADS);
  
       //Front
       glNormal3f(0.0f, 0.0f, 1.0f);
@@ -117,6 +122,7 @@ void HNode::render(){
       glVertex3f(0, 0, cuboid_breadth);
  
     glEnd();
+    glFlush();
   }
   else if(obj_type == 2){
     glutSolidTorus(inRadius, outRadius, nsides, rings);
@@ -139,9 +145,70 @@ void HNode::change_parameters(float tx,float ty,float tz,float rx,float ry,float
 
 void HNode::render_tree(){
   glPushMatrix();
+  // glBegin(GL_POINTS);
+  //   // glVertex3f(0.0f, 0.5f, 0.0f);
+  //   // glVertex3f(0.5f, -0.5f, 0.0f);
+  //   // glVertex3f(-0.5f, -0.5f, 0.0f);
+  //   glVertex3f(0,0,0);
+  // glEnd();
   render();
   for(int i=0;i<children.size();i++){
     children[i]->render_tree();
   }
   glPopMatrix();
+}
+
+void HNode::inc_rx(){
+  rx++;
+  if(rx>360)
+  rx-=360;
+}
+void HNode::inc_ry(){
+  ry++;
+  if(ry>360)
+  ry-=360;
+}
+void HNode::inc_rz(){
+  rz++;
+  if(rz>360)
+  rz-=360;
+}
+void HNode::dec_rx(){
+  rx--;
+  if(rx<0)
+  rx+=360;
+}
+void HNode::dec_ry(){
+  ry--;
+  if(ry<0)
+  ry+=360;
+}
+void HNode::dec_rz(){
+  rz--;
+  if(rz<0)
+  rz+=360;
+}
+
+void HNode::dec_ty(){
+  ty--;
+}
+
+void HNode::inc_tx(){
+  tx++;
+}
+
+void HNode::inc_ty(){
+  ty++;
+}
+
+void HNode::dec_tx(){
+  tx--;
+}
+
+void HNode::inc_tz(){
+  tz++;
+}
+
+void HNode::dec_tz(){
+  tz--;
 }

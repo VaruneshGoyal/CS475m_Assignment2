@@ -10,17 +10,13 @@ void vertexcopy(float *src,float *dest);
 // A simple class that represents a node in the hierarchy tree
 class HNode {
 private:
-  float tx,ty,tz;		//translation from its origin
-  float rx,ry,rz;		//rotation about x, y, z
+  
   // int num_vertices;		//no of vertices
   // float **vertex_pos;	//pointer to array of all vertices
   // float **vertex_col;	//pointer to array of colors of vertices
 
   std::vector<HNode*> children;		//vector containing pointers to children nodes
   HNode* parent;					//pointer to parent node
-
-  
-
   
   //default = -1
   //0 - cylinder
@@ -28,6 +24,10 @@ private:
   //2 - torus
 
 public:
+
+  float tx,ty,tz;   //translation from its origin
+  float rx,ry,rz;   //rotation about x, y, z
+  
   GLUquadric* quad;
   GLdouble base;
   GLdouble inRadius;
@@ -53,13 +53,20 @@ public:
   // void make_cuboid();
   // void make_cylinder();
   // void make_torus();
+  
   //increment/decrement parameters
-  // void inc_rx();
-  // void inc_ry();
-  // void inc_rz();
-  // void dec_rx();
-  // void dec_ry();
-  // void dec_rz();
+  void inc_rx();
+  void inc_ry();
+  void inc_rz();
+  void dec_rx();
+  void dec_ry();
+  void dec_rz();
+  void dec_ty();
+  void inc_tx();
+  void inc_ty();
+  void dec_tx();
+  void inc_tz();
+  void dec_tz();
 };
 
 #endif
