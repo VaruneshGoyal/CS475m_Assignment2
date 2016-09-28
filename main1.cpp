@@ -41,6 +41,12 @@ HNode *handle_connect_with_frame, *handle_connect_front_wheel_across,
   float handlebar_handle_length = 10;
   float wheel_axis_length = handle_connect_front_wheel_across_length - 2*bar_radius;
 
+  float frame_upper_horizontal_len = 50;  //123
+  float frame_lower_horizontal_len = 50;
+  float frame_right_vertical_len = 48;
+  float frame_upper_right_horizontal_len = 40;
+  float frame_lower_right_horizontal_len = 35;
+
 //dynamic variables  
   float handle_rotation = 0;
   float wheel_rotation = 0;
@@ -112,15 +118,15 @@ void processNormalKeys(unsigned char key, int x, int y) {
       break;
     case '3':
       //curr=0;
-      cout<<"rz1 "<<frame[0]->rz<<endl;
-      cout<<"rx1 "<<frame[0]->rx<<endl;
-      cout<<"ry1 "<<frame[0]->ry<<endl;
+      cout<<"rz1 "<<frame[2]->rz<<endl;
+      cout<<"rx1 "<<frame[2]->rx<<endl;
+      cout<<"ry1 "<<frame[2]->ry<<endl;
       break;
     case '4':
       //curr=1;
-      cout<<"tx1 "<<frame[0]->tx<<endl;
-      cout<<"ty1 "<<frame[0]->ty<<endl;
-      cout<<"tz1 "<<frame[0]->tz<<endl;
+      cout<<"tx1 "<<frame[4]->tx<<endl;
+      cout<<"ty1 "<<frame[4]->ty<<endl;
+      cout<<"tz1 "<<frame[4]->tz<<endl;
       break;
     case '5':
       //curr=0;
@@ -148,32 +154,32 @@ void processSpecialKeys(int key, int x, int y) {
   switch(key) {
     case GLUT_KEY_LEFT :
     //node[curr]->dec_ry();
-    frame[0]->dec_tx();
+    frame[4]->dec_tx();
     // node[0]->dec_rx();
     break;
     case GLUT_KEY_RIGHT :
     //node[curr]->inc_ry();
-    frame[0]->inc_tx();
+    frame[4]->inc_tx();
     // node[0]->inc_rx();
     break;
     case GLUT_KEY_UP :
     //node[curr]->dec_rx();
-    frame[0]->inc_ty();
+    frame[4]->inc_ty();
     // node[0]->inc_ry();
     break;
     case GLUT_KEY_DOWN :
     // node[curr]->inc_rx();
-    frame[0]->dec_ty();
+    frame[4]->dec_ty();
     // node[0]->dec_ry();
     break;
     case GLUT_KEY_PAGE_UP :
     //node[curr]->dec_rz();
-    frame[0]->inc_tz();
+    frame[2]->inc_ry();
     // node[0]->inc_tz();
     break;
     case GLUT_KEY_PAGE_DOWN :
     //node[curr]->inc_rz();
-    frame[0]->dec_tz();
+    frame[2]->dec_ry();
     // node[0]->dec_tz();
     break;
   }
@@ -507,6 +513,67 @@ for(int i=0; i<9; i++){
   // frame[0]->change_parameters(2.0,0.0,0.0,0.0,0.0,0.0);
   // wheel_front = new HNode(frame[0],36,v_positions,v_colors);
   // wheel_front->change_parameters(2.0,0.0,0.0,0.0,0.0,0.0);
+
+  /********the main frame****************/
+
+  //frame[0] = frame_upper_horizontal
+  frame[0]-> obj_type=0;
+  frame[0]->base=bar_radius;
+  frame[0]->top=bar_radius;
+  frame[0]->height=frame_upper_horizontal_len;
+  frame[0]->slices=50;
+  frame[0]->stacks=10;
+  frame[0]->change_parameters(-25,40,0,-90,105,0);
+  frame[0]->set_color(1,0,0);
+  node[0]->add_child(frame[0]);
+
+  //frame[1] = frame_lower_horizontal
+  frame[1] = new HNode(NULL);
+  frame[1]-> obj_type=0;
+  frame[1]->base=bar_radius;
+  frame[1]->top=bar_radius;
+  frame[1]->height=frame_lower_horizontal_len;
+  frame[1]->slices=50;
+  frame[1]->stacks=10;
+  frame[1]->change_parameters(-26,35,0,-90,120,0);
+  frame[1]->set_color(1,0,0);
+  node[0]->add_child(frame[1]);
+
+  //frame[2] = frame_right_vertical
+  frame[2] = new HNode(NULL);
+  frame[2]->obj_type=0;
+  frame[2]->base=bar_radius;
+  frame[2]->top=bar_radius;
+  frame[2]->height=frame_right_vertical_len;
+  frame[2]->slices=50;
+  frame[2]->stacks=10;
+  frame[2]->change_parameters(17,-1,0,-90,12,0);
+  frame[2]->set_color(1,0,0);
+  node[0]->add_child(frame[2]);
+
+  //frame upper right horizontal
+  frame[3] = new HNode(NULL);
+  frame[3]->obj_type=0;
+  frame[3]->base=bar_radius;
+  frame[3]->top=bar_radius;
+  frame[3]->height=frame_upper_right_horizontal_len;
+  frame[3]->slices=50;
+  frame[3]->stacks=10;
+  frame[3]->change_parameters(22,28,0,-90,135,0);
+  frame[3]->set_color(1,0,0);
+  node[0]->add_child(frame[3]);
+
+  //frame lower right horizontal
+  frame[4] = new HNode(NULL);
+  frame[4]->obj_type=0;
+  frame[4]->base=bar_radius;
+  frame[4]->top=bar_radius;
+  frame[4]->height=frame_lower_right_horizontal_len;
+  frame[4]->slices=50;
+  frame[4]->stacks=10;
+  frame[4]->change_parameters(16,0,0,-90,90,0);
+  frame[4]->set_color(1,0,0);
+  node[0]->add_child(frame[4]);
 
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
