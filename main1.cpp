@@ -20,15 +20,84 @@ HNode *spoke_front2_extra[9];
 HNode *spoke_back2_extra[9];
 HNode *wheel_axis_f, *wheel_axis_b;
 
+
 HNode *handle_connect_with_frame, *handle_connect_front_wheel_across, 
       *handle_connect_front_wheel_left, *handle_connect_front_wheel_right,
       *handlebar_connector, *handlebar_connector_across, *handlebar_left, *handlebar_right;
+
+//static variables
+  float wheel_outer_radius = 24;
+  float wheel_tyre_radius = 1;
+  float bar_radius = 2;
+  float handlebar_connector_across_length = 23;
+  float handlebar_connector_length = 15;
+  float spoke_length = 21;
+  float spoke_radius = 0.3;
+  float extra_spoke_length = 2;
+  float extra_spoke_radius = 0.4;
+  float handle_connect_with_frame_length = 23;
+  float handle_connect_front_wheel_across_length = 8;
+  float handle_connect_front_wheel_length = wheel_outer_radius + bar_radius + 0.5;
+  float handlebar_handle_length = 10;
+  float wheel_axis_length = handle_connect_front_wheel_across_length - 2*bar_radius;
+
+//dynamic variables  
+  float handle_rotation = 0;
+  float wheel_rotation = 0;
+
+
 int curr=0; //Index of current oprational node
 
 
 //Our function for processing ASCII keys
 void processNormalKeys(unsigned char key, int x, int y) {
   switch(key) {
+    case 'X':
+      glRotatef(1,1,0,0);
+      glutPostRedisplay();
+      break;
+    case 'Y':
+      glRotatef(1,0,1,0);
+      glutPostRedisplay();
+      break;      
+    case 'Z':
+      glRotatef(1,0,0,1);
+      glutPostRedisplay();
+      break;     
+    case 'x':
+      glRotatef(1,-1,0,0);
+      glutPostRedisplay();
+      break;
+    case 'y':
+      glRotatef(1,0,-1,0);
+      glutPostRedisplay();
+      break;      
+    case 'z':
+      glRotatef(1,0,0,-1);
+      glutPostRedisplay();
+      break;     
+    case 'H':
+      handle_rotation++;
+      handle_connect_with_frame->rz++;
+      glutPostRedisplay();
+      break;
+    case 'h':
+      handle_rotation--;
+      handle_connect_with_frame->rz--;
+      glutPostRedisplay();
+      break;
+    case 'F':
+      wheel_rotation++;
+      wheel_front->rz++;
+      wheel_back->rz++;
+      glutPostRedisplay();
+      break;
+    case 'B':
+      wheel_rotation--;
+      wheel_front->rz--;
+      wheel_back->rz--;
+      glutPostRedisplay();
+      break;
     case '1':
       //curr=0;
       cout<<"rz "<<node[0]->rz<<endl;
@@ -127,7 +196,7 @@ void init(void)
   // Setup the view of the cube.
   glMatrixMode(GL_PROJECTION);
   //gluPerspective(field of view in degree, aspect ratio, Z near, Z far);
-  gluPerspective(80.0, 1.0, 1.0, 120.0);
+  gluPerspective(80.0, 1.0, 1.0, 200.0);
 
   glMatrixMode(GL_MODELVIEW);
   gluLookAt(0.0, 0.0, 100.0,  // eye is at (0,0,8)
@@ -138,7 +207,7 @@ void init(void)
 int main(int argc, char **argv)
 {
 
-  //Parent Node
+//Parent Node
 
   //of the first node - tilted cylinder connecting front handle and gear
   // wheel_front = new HNode(node[0]);
@@ -161,7 +230,7 @@ int main(int argc, char **argv)
   // frame[0]->change_parameters(-9, 0, 0, 90, 70, 0);
 
 
-  // of the first node - vetical cylinder containing the front handle
+// of the first node - vetical cylinder containing the front handle
   node[0] = new HNode(NULL);
   
   frame[0] = new HNode(NULL);
@@ -228,27 +297,27 @@ int main(int argc, char **argv)
 
 //front wheel...this is child of handle_with_wheel_across!
   wheel_front->obj_type = 2;
-  wheel_front->inRadius=1;
-  wheel_front->outRadius=24;
+  wheel_front->inRadius=wheel_tyre_radius;
+  wheel_front->outRadius=wheel_outer_radius;
   wheel_front->nsides=50;
   wheel_front->rings=50;
-  wheel_front->change_parameters(0,-26.5, 0, 0, 0, 0);
+  wheel_front->change_parameters(0,-26.5, handle_connect_front_wheel_across_length/2, 0, 0, 0);
 
 
 //back wheel...this is child of nothing as of now
   wheel_back->obj_type = 2;
-  wheel_back->inRadius=1;
-  wheel_back->outRadius=24;
-  wheel_back->nsides=50;
+  wheel_back->inRadius=wheel_tyre_radius;
+  wheel_back->outRadius=wheel_outer_radius;
+  wheel_back->nsides=50;  
   wheel_back->rings=50;
   wheel_back->change_parameters(50, 0, 0, 0, 0, 0);
 
 //the spokes
 for(int i=0; i<9; i++){
   spoke_front[i]->obj_type = 0;
-  spoke_front[i]->base=0.3;
-  spoke_front[i]->top=0.3;
-  spoke_front[i]->height=23;
+  spoke_front[i]->base=spoke_radius;
+  spoke_front[i]->top=spoke_radius;
+  spoke_front[i]->height=spoke_length;
   spoke_front[i]->slices=50;
   spoke_front[i]->stacks=10;
   spoke_front[i]->change_preparameters(2,0,0);
@@ -256,9 +325,9 @@ for(int i=0; i<9; i++){
   spoke_front[i]->set_color(0.6,0.6,0.6);             //silverish color
 
   spoke_front_extra[i]->obj_type = 0;
-  spoke_front_extra[i]->base=0.4;
-  spoke_front_extra[i]->top=0.4;
-  spoke_front_extra[i]->height=2;
+  spoke_front_extra[i]->base=extra_spoke_radius;
+  spoke_front_extra[i]->top=extra_spoke_radius;
+  spoke_front_extra[i]->height=extra_spoke_length;
   spoke_front_extra[i]->slices=50;
   spoke_front_extra[i]->stacks=10;
   //spoke_front_extra[i]->change_preparameters(2,0,0);
@@ -266,9 +335,9 @@ for(int i=0; i<9; i++){
   spoke_front_extra[i]->set_color(0.855,0.647,0.125);       //goldenrod color
 
   spoke_back[i]->obj_type = 0;
-  spoke_back[i]->base=0.3;
-  spoke_back[i]->top=0.3;
-  spoke_back[i]->height=23;
+  spoke_back[i]->base=spoke_radius;
+  spoke_back[i]->top=spoke_radius;
+  spoke_back[i]->height=spoke_length;
   spoke_back[i]->slices=50;
   spoke_back[i]->stacks=10;
   spoke_back[i]->change_preparameters(2,0,0);
@@ -276,9 +345,9 @@ for(int i=0; i<9; i++){
   spoke_back[i]->set_color(0.6,0.6,0.6);
 
   spoke_back_extra[i]->obj_type = 0;
-  spoke_back_extra[i]->base=0.4;
-  spoke_back_extra[i]->top=0.4;
-  spoke_back_extra[i]->height=2;
+  spoke_back_extra[i]->base=extra_spoke_radius;
+  spoke_back_extra[i]->top=extra_spoke_radius;
+  spoke_back_extra[i]->height=extra_spoke_length;
   spoke_back_extra[i]->slices=50;
   spoke_back_extra[i]->stacks=10;
   //spoke_back_extra[i]->change_preparameters(2,0,0);
@@ -286,9 +355,9 @@ for(int i=0; i<9; i++){
   spoke_back_extra[i]->set_color(0.855,0.647,0.125);
 
   spoke_front2[i]->obj_type = 0;
-  spoke_front2[i]->base=0.3;
-  spoke_front2[i]->top=0.3;
-  spoke_front2[i]->height=23;
+  spoke_front2[i]->base=spoke_radius;
+  spoke_front2[i]->top=spoke_radius;
+  spoke_front2[i]->height=spoke_length;
   spoke_front2[i]->slices=50;
   spoke_front2[i]->stacks=10;
   spoke_front2[i]->change_preparameters(-2,0,0);
@@ -296,9 +365,9 @@ for(int i=0; i<9; i++){
   spoke_front2[i]->set_color(0.6,0.6,0.6);
 
   spoke_front2_extra[i]->obj_type = 0;
-  spoke_front2_extra[i]->base=0.4;
-  spoke_front2_extra[i]->top=0.4;
-  spoke_front2_extra[i]->height=2;
+  spoke_front2_extra[i]->base=extra_spoke_radius;
+  spoke_front2_extra[i]->top=extra_spoke_radius;
+  spoke_front2_extra[i]->height=extra_spoke_length;
   spoke_front2_extra[i]->slices=50;
   spoke_front2_extra[i]->stacks=10;
   //spoke_front2_extra[i]->change_preparameters(2,0,0);
@@ -306,9 +375,9 @@ for(int i=0; i<9; i++){
   spoke_front2_extra[i]->set_color(0.855,0.647,0.125);
 
   spoke_back2[i]->obj_type = 0;
-  spoke_back2[i]->base=0.3;
-  spoke_back2[i]->top=0.3;
-  spoke_back2[i]->height=23;
+  spoke_back2[i]->base=spoke_radius;
+  spoke_back2[i]->top=spoke_radius;
+  spoke_back2[i]->height=spoke_length;
   spoke_back2[i]->slices=50;
   spoke_back2[i]->stacks=10;
   spoke_back2[i]->change_preparameters(-2,0,0);
@@ -316,9 +385,9 @@ for(int i=0; i<9; i++){
   spoke_back2[i]->set_color(0.6,0.6,0.6);
 
   spoke_back2_extra[i]->obj_type = 0;
-  spoke_back2_extra[i]->base=0.4;
-  spoke_back2_extra[i]->top=0.4;
-  spoke_back2_extra[i]->height=2;
+  spoke_back2_extra[i]->base=extra_spoke_radius;
+  spoke_back2_extra[i]->top=extra_spoke_radius;
+  spoke_back2_extra[i]->height=extra_spoke_length;
   spoke_back2_extra[i]->slices=50;
   spoke_back2_extra[i]->stacks=10;
   //spoke_back2_extra[i]->change_preparameters(2,0,0);
@@ -328,33 +397,35 @@ for(int i=0; i<9; i++){
 
 //the wheel axes
   wheel_axis_f->obj_type=0;
-  wheel_axis_f->base=2;
-  wheel_axis_f->top=2;
-  wheel_axis_f->height=2;
+  wheel_axis_f->base=bar_radius;
+  wheel_axis_f->top=bar_radius;
+  wheel_axis_f->height=wheel_axis_length;
   wheel_axis_f->slices=50;
   wheel_axis_f->stacks=10;
+  wheel_axis_f->change_parameters(0,0,-wheel_axis_length/2,0,0,0);
 
   wheel_axis_b->obj_type=0;
-  wheel_axis_b->base=2;
-  wheel_axis_b->top=2;
-  wheel_axis_b->height=2;
+  wheel_axis_b->base=bar_radius;
+  wheel_axis_b->top=bar_radius;
+  wheel_axis_b->height=wheel_axis_length;
   wheel_axis_b->slices=50;
   wheel_axis_b->stacks=10;
+  wheel_axis_b->change_parameters(0,0,-wheel_axis_length/2,0,0,0);
 
 //handle of the cycle
   handle_connect_with_frame->obj_type=0;
-  handle_connect_with_frame->base=2;
-  handle_connect_with_frame->top=2;
-  handle_connect_with_frame->height=23;
+  handle_connect_with_frame->base=bar_radius;
+  handle_connect_with_frame->top=bar_radius;
+  handle_connect_with_frame->height=handle_connect_with_frame_length;
   handle_connect_with_frame->slices=50;
   handle_connect_with_frame->stacks=10;
   handle_connect_with_frame->change_parameters(-30,26.5,0,-90,25,0);
   handle_connect_with_frame->set_color(1,0,0);    
 
   handlebar_connector->obj_type=0;
-  handlebar_connector->base=2;
-  handlebar_connector->top=2;
-  handlebar_connector->height=15;
+  handlebar_connector->base=bar_radius;
+  handlebar_connector->top=bar_radius;
+  handlebar_connector->height=handlebar_connector_length;
   handlebar_connector->slices=50;
   handlebar_connector->stacks=10;
   handlebar_connector->change_preparameters(0,0,0);
@@ -362,9 +433,9 @@ for(int i=0; i<9; i++){
   handlebar_connector->set_color(0,1,0);  
 
   handlebar_connector_across->obj_type=0;
-  handlebar_connector_across->base=2;
-  handlebar_connector_across->top=2;
-  handlebar_connector_across->height=23;
+  handlebar_connector_across->base=bar_radius;
+  handlebar_connector_across->top=bar_radius;
+  handlebar_connector_across->height=handlebar_connector_across_length;
   handlebar_connector_across->slices=50;
   handlebar_connector_across->stacks=10;
   handlebar_connector_across->change_preparameters(0,0,-handlebar_connector_across->height/2);
@@ -372,27 +443,27 @@ for(int i=0; i<9; i++){
   handlebar_connector_across->set_color(0,1,0);   
 
   handlebar_left->obj_type=0;
-  handlebar_left->base=2;
-  handlebar_left->top=2;
-  handlebar_left->height=10;
+  handlebar_left->base=bar_radius;
+  handlebar_left->top=bar_radius;
+  handlebar_left->height=handlebar_handle_length;
   handlebar_left->slices=50;
   handlebar_left->stacks=10;
   handlebar_left->change_parameters(0,0,handlebar_connector_across->height,0,0,0);
   handlebar_left->set_color(0,0,0);
 
   handlebar_right->obj_type=0;
-  handlebar_right->base=2;
-  handlebar_right->top=2;
-  handlebar_right->height=10;
+  handlebar_right->base=bar_radius;
+  handlebar_right->top=bar_radius;
+  handlebar_right->height=handlebar_handle_length;
   handlebar_right->slices=50;
   handlebar_right->stacks=10;
   handlebar_right->change_parameters(0,0,-handlebar_right->height,0,0,0);
   handlebar_right->set_color(0,0,0);
 
   handle_connect_front_wheel_across->obj_type=0;
-  handle_connect_front_wheel_across->base=2;
-  handle_connect_front_wheel_across->top=1;
-  handle_connect_front_wheel_across->height=6;
+  handle_connect_front_wheel_across->base=bar_radius;
+  handle_connect_front_wheel_across->top=bar_radius;
+  handle_connect_front_wheel_across->height=handle_connect_front_wheel_across_length;
   handle_connect_front_wheel_across->slices=50;
   handle_connect_front_wheel_across->stacks=10;
   handle_connect_front_wheel_across->change_preparameters(0,0,-handle_connect_front_wheel_across->height/2);
@@ -400,9 +471,9 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_across->set_color(0,0,0);  
 
   handle_connect_front_wheel_left->obj_type=0;
-  handle_connect_front_wheel_left->base=2;
-  handle_connect_front_wheel_left->top=2;
-  handle_connect_front_wheel_left->height=25.5;
+  handle_connect_front_wheel_left->base=bar_radius;
+  handle_connect_front_wheel_left->top=bar_radius;
+  handle_connect_front_wheel_left->height=handle_connect_front_wheel_length;
   handle_connect_front_wheel_left->slices=50;
   handle_connect_front_wheel_left->stacks=10;
   //handle_connect_front_wheel_left->change_preparameters(0,0,0);
@@ -410,8 +481,8 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_left->set_color(0,1,0); 
 
   handle_connect_front_wheel_right->obj_type=0;
-  handle_connect_front_wheel_right->base=2;
-  handle_connect_front_wheel_right->top=2;
+  handle_connect_front_wheel_right->base=bar_radius;
+  handle_connect_front_wheel_right->top=bar_radius;
   handle_connect_front_wheel_right->height=25.5;
   handle_connect_front_wheel_right->slices=50;
   handle_connect_front_wheel_right->stacks=10;
@@ -420,16 +491,16 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_right->set_color(0,1,0);   
 
 //trial nodes
-// HNode *cylin = new HNode(NULL);
-// node[0]->add_child(cylin);
-// cylin->obj_type = 0;
-// cylin->base=0.5;
-// cylin->top=0.5;
-// cylin->height=22;
-// cylin->slices=50;
-// cylin->stacks=10;
-// //cylin->change_preparameters(1,-3,0);
-// cylin->change_parameters(0,0,0,0,0,0);
+  // HNode *cylin = new HNode(NULL);
+  // node[0]->add_child(cylin);
+  // cylin->obj_type = 0;
+  // cylin->base=0.5;
+  // cylin->top=0.5;
+  // cylin->height=22;
+  // cylin->slices=50;
+  // cylin->stacks=10;
+  // //cylin->change_preparameters(1,-3,0);
+  // cylin->change_parameters(0,0,0,0,0,0);
 
   //Child Nodes
   // frame[0] = new HNode(node[0],36,v_positions,v_colors);
@@ -447,4 +518,5 @@ for(int i=0; i<9; i++){
   init();
   glutMainLoop();
   return 0;
+
 }
