@@ -60,9 +60,6 @@ HNode *handle_connect_with_frame, *handle_connect_front_wheel_across,
   float wheel_rotation = 0;
 
 
-int curr=0; //Index of current oprational node
-
-
 //Our function for processing ASCII keys
 void processNormalKeys(unsigned char key, int x, int y) {
   switch(key) {
@@ -112,46 +109,18 @@ void processNormalKeys(unsigned char key, int x, int y) {
       wheel_back->rz--;
       glutPostRedisplay();
       break;
-    case '1':
-      //curr=0;
-      cout<<"rz "<<node[0]->rz<<endl;
-      cout<<"rx "<<node[0]->rx<<endl;
-      cout<<"ry "<<node[0]->ry<<endl;
+    case 'P':
+      gear[0]->rz++;
+      pedal_cuboid[0]->change_parameters(0,1,0,0,45+gear[0]->rz,0);
+      pedal_cuboid[1]->change_parameters(0,1,0,0,45+gear[0]->rz,0);
+      glutPostRedisplay();
       break;
-    case '2':
-      //curr=1;
-      cout<<"tx "<<node[0]->tx<<endl;
-      cout<<"ty "<<node[0]->ty<<endl;
-      cout<<"tz "<<node[0]->tz<<endl;
+    case 'p':
+      gear[0]->rz--;
+      pedal_cuboid[0]->change_parameters(0,1,0,0,45+gear[0]->rz,0);
+      pedal_cuboid[1]->change_parameters(0,1,0,0,45+gear[0]->rz,0);
+      glutPostRedisplay();
       break;
-    case '3':
-      //curr=0;
-      cout<<"rz1 "<<frame[2]->rz<<endl;
-      cout<<"rx1 "<<frame[2]->rx<<endl;
-      cout<<"ry1 "<<frame[2]->ry<<endl;
-      break;
-    case '4':
-      //curr=1;
-      cout<<"tx1 "<<frame[4]->tx<<endl;
-      cout<<"ty1 "<<frame[4]->ty<<endl;
-      cout<<"tz1 "<<frame[4]->tz<<endl;
-      break;
-    case '5':
-      //curr=0;
-      cout<<"rz1 "<<wheel_front->rz<<endl;
-      cout<<"rx1 "<<wheel_front->rx<<endl;
-      cout<<"ry1 "<<wheel_front->ry<<endl;
-      break;
-    case '6':
-      //curr=1;
-      cout<<"tx1 "<<wheel_front->tx<<endl;
-      cout<<"ty1 "<<wheel_front->ty<<endl;
-      cout<<"tz1 "<<wheel_front->tz<<endl;
-      break;
-    // case '3':
-    //   //curr=2;
-
-    //   break;
   }
   if (key == 27)
   exit(0);
@@ -195,16 +164,14 @@ void processSpecialKeys(int key, int x, int y) {
   glutPostRedisplay();
 }
 
-void display(void)
-{
+void display(void){
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   node[0]->render_tree();
   glutSwapBuffers();
 }
 
-void init(void)
-{
+void init(void){
   // Use depth buffering for hidden surface elimination.
   glEnable(GL_DEPTH_TEST);
   // Setup the view of the cube.
@@ -220,29 +187,6 @@ void init(void)
 
 int main(int argc, char **argv)
 {
-
-//Parent Node
-
-  //of the first node - tilted cylinder connecting front handle and gear
-  // wheel_front = new HNode(node[0]);
-  // wheel_front->obj_type = 0;
-  // wheel_front->base=4.5;
-  // wheel_front->top=4.5;
-  // wheel_front->height=45;
-  // wheel_front->slices=50;
-  // wheel_front->stacks=10;
-  // wheel_front->change_parameters(-9, 4, 0, 53, 61, 56);
-
-  // // //of the first node - tilted cylinder connecting front handle and seat
-  // frame[0] = new HNode(node[0]);
-  // frame[0]->obj_type = 0;
-  // frame[0]->base=4.5;
-  // frame[0]->top=4.5;
-  // frame[0]->height=90;
-  // frame[0]->slices=50;
-  // frame[0]->stacks=10;
-  // frame[0]->change_parameters(-9, 0, 0, 90, 70, 0);
-
 
 // of the first node - vetical cylinder containing the front handle
   node[0] = new HNode(NULL);
@@ -301,14 +245,6 @@ int main(int argc, char **argv)
   handlebar_connector_across->add_child(handlebar_left);
   handlebar_connector_across->add_child(handlebar_right);
 
-
-//trial - cuboid
-  // node[0]->obj_type=1;
-  // node[0]->cuboid_length=5;
-  // node[0]->cuboid_height=5;
-  // node[0]->cuboid_breadth=5;
-  // node[0]->change_parameters(0, 0, 0, 45, 0, 0);
-
 //front wheel...this is child of handle_with_wheel_across!
   wheel_front->obj_type = 2;
   wheel_front->inRadius=wheel_tyre_radius;
@@ -316,7 +252,6 @@ int main(int argc, char **argv)
   wheel_front->nsides=50;
   wheel_front->rings=50;
   wheel_front->change_parameters(0,-26.5, handle_connect_front_wheel_across_length/2, 0, 0, 0);
-
 
 //back wheel...this is child of nothing as of now
   wheel_back->obj_type = 2;
@@ -409,7 +344,7 @@ for(int i=0; i<9; i++){
   spoke_back2_extra[i]->set_color(0.855,0.647,0.125);
 }
 
-  //the wheel axes
+//the wheel axes
   wheel_axis_f->obj_type=0;
   wheel_axis_f->base=bar_radius;
   wheel_axis_f->top=bar_radius;
@@ -426,7 +361,7 @@ for(int i=0; i<9; i++){
   wheel_axis_b->stacks=10;
   wheel_axis_b->change_parameters(0,0,-wheel_axis_length/2,0,0,0);
 
-  //handle of the cycle
+//handle of the cycle
   handle_connect_with_frame->obj_type=0;
   handle_connect_with_frame->base=bar_radius;
   handle_connect_with_frame->top=bar_radius;
@@ -490,7 +425,6 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_left->height=handle_connect_front_wheel_length;
   handle_connect_front_wheel_left->slices=50;
   handle_connect_front_wheel_left->stacks=10;
-  //handle_connect_front_wheel_left->change_preparameters(0,0,0);
   handle_connect_front_wheel_left->change_parameters(0,0,handle_connect_front_wheel_across->height,90,0,0);
   // handle_connect_front_wheel_left->set_color(0,1,0); 
   handle_connect_front_wheel_left->set_color(0.7,0.7,0.7); 
@@ -501,7 +435,6 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_right->height=25.5;
   handle_connect_front_wheel_right->slices=50;
   handle_connect_front_wheel_right->stacks=10;
-  //handle_connect_front_wheel_right->change_preparameters(0,0,0);
   handle_connect_front_wheel_right->change_parameters(0,0,0,90,0,0);
   // handle_connect_front_wheel_right->set_color(0,1,0);   
   handle_connect_front_wheel_right->set_color(0.5,0.5,0.5);   
@@ -526,7 +459,7 @@ for(int i=0; i<9; i++){
 
   /********the main frame****************/
 
-  //frame[0] = frame_upper_horizontal
+//frame[0] = frame_upper_horizontal
   frame[0]-> obj_type=0;
   frame[0]->base=bar_radius;
   frame[0]->top=bar_radius;
@@ -585,7 +518,7 @@ for(int i=0; i<9; i++){
   frame[4]->set_color(1,0,0);
   node[0]->add_child(frame[4]);
 
-  //seat
+//seat
   seat[0] = new HNode(NULL);
   seat[0]->obj_type=3;
   seat[0]->triangle_x1=30;
@@ -606,7 +539,7 @@ for(int i=0; i<9; i++){
   seat[1]->set_color(0,0,0);
   node[0]->add_child(seat[1]);
 
-  //gear
+//gear
   gear[0] = new HNode(NULL);
   gear[0]->obj_type=2;
   gear[0]->change_parameters(15,0,2,0,0,0);
@@ -621,32 +554,30 @@ for(int i=0; i<9; i++){
 
   gear[1] = new HNode(NULL);
   gear[1]->obj_type=2;
-  gear[1]->change_parameters(15,0,2,0,0,0);
   gear[1]->set_color(0.6, 0.6, 0.6);
   gear[1]->inRadius=inner_gear_radius;
   gear[1]->outRadius=inner_gear_radius;
   gear[1]->nsides=10;
   gear[1]->rings=50;
-  node[0]->add_child(gear[1]);
+  gear[0]->add_child(gear[1]);
 
-  // spokes in gear
-  cout<<"outer gear radius "<<outer_gear_inRadius<<endl;
-  cout<<"printing spokes cordinates : "<<endl;
+// spokes in gear
+  //cout<<"outer gear radius "<<outer_gear_inRadius<<endl;
+  //cout<<"printing spokes cordinates : "<<endl;
   for(int i=0;i<5;i++){
     gear_spokes[i] = new HNode(NULL);
     gear_spokes[i]->obj_type=3;
     gear_spokes[i]->triangle_x1=(6.5 - outer_gear_inRadius)*(cos(0.31416 + (1.26*i)));
-    cout<<(15+((6.5 - outer_gear_inRadius)*(cos(0.31416 + (1.26*i)))))<<endl;
+    //cout<<(15+((6.5 - outer_gear_inRadius)*(cos(0.31416 + (1.26*i)))))<<endl;
     gear_spokes[i]->triangle_y1=(6.5 - outer_gear_inRadius)*(sin(0.31416 + (1.26*i)));
     gear_spokes[i]->triangle_x2 = 1.5*(sin(1.26*(i+2)));
     gear_spokes[i]->triangle_y2 = -(1.5*(cos(1.26*(i+2))));
     gear_spokes[i]->change_parameters((1.5*(sin(1.26*(i+1)))),(-(1.5*(cos(1.26*(i+1))))),1,0,0,0);
     gear_spokes[i]->set_color(0.6, 0.6, 0.6);
     gear[0]->add_child(gear_spokes[i]);
-    gear[1]->add_child(gear_spokes[i]);
   }
 
-  //pedals
+//pedals
   //pedal rods
   pedal_rod[0] = new HNode(NULL);
   pedal_rod[0]->obj_type=0;
@@ -670,14 +601,15 @@ for(int i=0; i<9; i++){
   pedal_rod[1]->set_color(0.5,0.5,0.5);
   gear[0]->add_child(pedal_rod[1]);
 
-  //pedal cuboids
+//pedal cuboids
   pedal_cuboid[0] = new HNode(NULL);
   pedal_cuboid[0]->obj_type=1;
   pedal_cuboid[0]->cuboid_breadth=7;
   pedal_cuboid[0]->cuboid_height=4;
   pedal_cuboid[0]->cuboid_length=3.5;
   pedal_cuboid[0]->set_color(0.3,0.3,0.3);
-  pedal_cuboid[0]->change_parameters(-3,0,-5,0,35,0);
+  pedal_cuboid[0]->change_preparameters(-pedal_cuboid[0]->cuboid_length/2,0,-pedal_cuboid[0]->cuboid_breadth/2);
+  pedal_cuboid[0]->change_parameters(0,1,0,0,45-gear[0]->rz,0);  //1 is pedal_rod radius
   pedal_rod[0]->add_child(pedal_cuboid[0]);       //backside pedal
 
   pedal_cuboid[1] = new HNode(NULL);
@@ -686,9 +618,11 @@ for(int i=0; i<9; i++){
   pedal_cuboid[1]->cuboid_height=4;
   pedal_cuboid[1]->cuboid_length=3.5;
   pedal_cuboid[1]->set_color(0.3,0.3,0.3);
-  pedal_cuboid[1]->change_parameters(-5,-5,-5,0,35,0);
+  pedal_cuboid[1]->change_preparameters(-pedal_cuboid[1]->cuboid_length/2,0,-pedal_cuboid[1]->cuboid_breadth/2);
+  pedal_cuboid[1]->change_parameters(0,-pedal_cuboid[1]->cuboid_height - 1,0,0,45-gear[0]->rz,0);
   pedal_rod[1]->add_child(pedal_cuboid[1]);       //frontside pedal
 
+//
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(512,512);
