@@ -31,6 +31,7 @@ HNode::HNode(HNode* par){
   slices = nsides = 0;
   stacks = rings = 0;
   cuboid_height = cuboid_length = cuboid_breadth = 0;
+  triangle_x1, triangle_y1, triangle_x2, triangle_y2 = 0;
 }
 
 void HNode::add_child(HNode *child){
@@ -131,6 +132,13 @@ void HNode::render(){
   }
   else if(obj_type == 2){
     glutSolidTorus(inRadius, outRadius, nsides, rings);
+  }
+  else if(obj_type == 3){
+    glBegin(GL_TRIANGLES);
+      glVertex3f(tx, ty, tz);
+      glVertex3f(triangle_x1, triangle_y1, tz);
+      glVertex3f(triangle_x2, triangle_y2, tz);
+    glEnd();
   }
   else{
     //do nothing

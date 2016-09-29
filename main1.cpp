@@ -19,6 +19,10 @@ HNode *spoke_back_extra[9];
 HNode *spoke_front2_extra[9];
 HNode *spoke_back2_extra[9];
 HNode *wheel_axis_f, *wheel_axis_b;
+HNode *pedal_cuboid[2];
+HNode *gear;
+HNode *gear_spokes[5];
+HNode *seat[2];
 
 
 HNode *handle_connect_with_frame, *handle_connect_front_wheel_across, 
@@ -42,7 +46,7 @@ HNode *handle_connect_with_frame, *handle_connect_front_wheel_across,
   float wheel_axis_length = handle_connect_front_wheel_across_length - 2*bar_radius;
 
   float frame_upper_horizontal_len = 50;  //123
-  float frame_lower_horizontal_len = 50;
+  float frame_lower_horizontal_len = 55;
   float frame_right_vertical_len = 48;
   float frame_upper_right_horizontal_len = 40;
   float frame_lower_right_horizontal_len = 35;
@@ -535,9 +539,9 @@ for(int i=0; i<9; i++){
   frame[1]->height=frame_lower_horizontal_len;
   frame[1]->slices=50;
   frame[1]->stacks=10;
-  frame[1]->change_parameters(-26,35,0,-90,120,0);
+  frame[1]->change_parameters(-26,35,0,-90,130,0);
   frame[1]->set_color(1,0,0);
-  node[0]->add_child(frame[1]);
+  // node[0]->add_child(frame[1]);
 
   //frame[2] = frame_right_vertical
   frame[2] = new HNode(NULL);
@@ -549,7 +553,7 @@ for(int i=0; i<9; i++){
   frame[2]->stacks=10;
   frame[2]->change_parameters(17,-1,0,-90,12,0);
   frame[2]->set_color(1,0,0);
-  node[0]->add_child(frame[2]);
+  //node[0]->add_child(frame[2]);
 
   //frame upper right horizontal
   frame[3] = new HNode(NULL);
@@ -574,6 +578,54 @@ for(int i=0; i<9; i++){
   frame[4]->change_parameters(16,0,0,-90,90,0);
   frame[4]->set_color(1,0,0);
   node[0]->add_child(frame[4]);
+
+  //seat
+  seat[0] = new HNode(NULL);
+  seat[0]->obj_type=3;
+  seat[0]->triangle_x1=30;
+  seat[0]->triangle_y1=23;
+  seat[0]->triangle_x2=30;
+  seat[0]->triangle_y2=30;
+  seat[0]->change_parameters(10,23,0,0,0,0);
+  seat[0]->set_color(0,0,0);
+  node[0]->add_child(seat[0]);
+
+  seat[1] = new HNode(NULL);
+  seat[1]->obj_type=3;
+  seat[1]->triangle_x1=10;
+  seat[1]->triangle_y1=26;
+  seat[1]->triangle_x2=25;
+  seat[1]->triangle_y2=26;
+  seat[1]->change_parameters(10,23,0,0,0,0);
+  seat[1]->set_color(0,0,0);
+  node[0]->add_child(seat[1]);
+
+  //pedals
+  //cuboids
+  // pedal_cuboid[0] = new HNode(NULL);
+  // pedal_cuboid[0]->obj_type=1;
+  // pedal_cuboid[0]->cuboid_breadth=5;
+  // pedal_cuboid[0]->cuboid_height=5;
+  // pedal_cuboid[0]->cuboid_length=5;
+  // pedal_cuboid[0]->set_color(0,0,0);
+  // pedal_cuboid[0]->change_parameters(0,0,0,0,0,0);
+  // node[0]->add_child(pedal_cuboid[0]);
+
+  //gear
+  gear = new HNode(NULL);
+  gear->obj_type=2;
+  gear->set_color(0,0,0);
+  gear->change_parameters(15,0,0,0,0,0);
+  gear->inRadius=1;
+  gear->outRadius=6.5;
+  gear->nsides=10;
+  gear->rings=50;
+  node[0]->add_child(gear);
+  node[0]->add_child(frame[1]);
+  node[0]->add_child(frame[2]);
+
+  //spokes in gear
+
 
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
