@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "HNode.hpp"
+#include <cmath>
 
 using namespace std;
 
@@ -20,9 +21,10 @@ HNode *spoke_front2_extra[9];
 HNode *spoke_back2_extra[9];
 HNode *wheel_axis_f, *wheel_axis_b;
 HNode *pedal_cuboid[2];
-HNode *gear;
+HNode *gear[2];
 HNode *gear_spokes[5];
 HNode *seat[2];
+HNode *pedal_rod[2];
 
 
 HNode *handle_connect_with_frame, *handle_connect_front_wheel_across, 
@@ -50,6 +52,8 @@ HNode *handle_connect_with_frame, *handle_connect_front_wheel_across,
   float frame_right_vertical_len = 48;
   float frame_upper_right_horizontal_len = 40;
   float frame_lower_right_horizontal_len = 35;
+  float outer_gear_inRadius = 1;
+  float inner_gear_radius = 1.5;
 
 //dynamic variables  
   float handle_rotation = 0;
@@ -405,7 +409,7 @@ for(int i=0; i<9; i++){
   spoke_back2_extra[i]->set_color(0.855,0.647,0.125);
 }
 
-//the wheel axes
+  //the wheel axes
   wheel_axis_f->obj_type=0;
   wheel_axis_f->base=bar_radius;
   wheel_axis_f->top=bar_radius;
@@ -422,7 +426,7 @@ for(int i=0; i<9; i++){
   wheel_axis_b->stacks=10;
   wheel_axis_b->change_parameters(0,0,-wheel_axis_length/2,0,0,0);
 
-//handle of the cycle
+  //handle of the cycle
   handle_connect_with_frame->obj_type=0;
   handle_connect_with_frame->base=bar_radius;
   handle_connect_with_frame->top=bar_radius;
@@ -440,7 +444,7 @@ for(int i=0; i<9; i++){
   handlebar_connector->stacks=10;
   handlebar_connector->change_preparameters(0,0,0);
   handlebar_connector->change_parameters(0,0,handle_connect_with_frame->height,0,-90,0);
-  handlebar_connector->set_color(0,1,0);  
+  handlebar_connector->set_color(0.7,0.7,0.7);  
 
   handlebar_connector_across->obj_type=0;
   handlebar_connector_across->base=bar_radius;
@@ -450,7 +454,7 @@ for(int i=0; i<9; i++){
   handlebar_connector_across->stacks=10;
   handlebar_connector_across->change_preparameters(0,0,-handlebar_connector_across->height/2);
   handlebar_connector_across->change_parameters(0,0,handlebar_connector->height,90,0,0);
-  handlebar_connector_across->set_color(0,1,0);   
+  handlebar_connector_across->set_color(0.7,0.7,0.7);
 
   handlebar_left->obj_type=0;
   handlebar_left->base=bar_radius;
@@ -488,7 +492,8 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_left->stacks=10;
   //handle_connect_front_wheel_left->change_preparameters(0,0,0);
   handle_connect_front_wheel_left->change_parameters(0,0,handle_connect_front_wheel_across->height,90,0,0);
-  handle_connect_front_wheel_left->set_color(0,1,0); 
+  // handle_connect_front_wheel_left->set_color(0,1,0); 
+  handle_connect_front_wheel_left->set_color(0.7,0.7,0.7); 
 
   handle_connect_front_wheel_right->obj_type=0;
   handle_connect_front_wheel_right->base=bar_radius;
@@ -498,7 +503,8 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_right->stacks=10;
   //handle_connect_front_wheel_right->change_preparameters(0,0,0);
   handle_connect_front_wheel_right->change_parameters(0,0,0,90,0,0);
-  handle_connect_front_wheel_right->set_color(0,1,0);   
+  // handle_connect_front_wheel_right->set_color(0,1,0);   
+  handle_connect_front_wheel_right->set_color(0.5,0.5,0.5);   
 
 //trial nodes
   // HNode *cylin = new HNode(NULL);
@@ -600,32 +606,88 @@ for(int i=0; i<9; i++){
   seat[1]->set_color(0,0,0);
   node[0]->add_child(seat[1]);
 
-  //pedals
-  //cuboids
-  // pedal_cuboid[0] = new HNode(NULL);
-  // pedal_cuboid[0]->obj_type=1;
-  // pedal_cuboid[0]->cuboid_breadth=5;
-  // pedal_cuboid[0]->cuboid_height=5;
-  // pedal_cuboid[0]->cuboid_length=5;
-  // pedal_cuboid[0]->set_color(0,0,0);
-  // pedal_cuboid[0]->change_parameters(0,0,0,0,0,0);
-  // node[0]->add_child(pedal_cuboid[0]);
-
   //gear
-  gear = new HNode(NULL);
-  gear->obj_type=2;
-  gear->set_color(0,0,0);
-  gear->change_parameters(15,0,0,0,0,0);
-  gear->inRadius=1;
-  gear->outRadius=6.5;
-  gear->nsides=10;
-  gear->rings=50;
-  node[0]->add_child(gear);
+  gear[0] = new HNode(NULL);
+  gear[0]->obj_type=2;
+  gear[0]->change_parameters(15,0,2,0,0,0);
+  gear[0]->inRadius=outer_gear_inRadius;
+  gear[0]->outRadius=6.5;
+  gear[0]->nsides=10;
+  gear[0]->rings=50;
+  gear[0]->set_color(0.6, 0.6, 0.6);
+  node[0]->add_child(gear[0]);
   node[0]->add_child(frame[1]);
   node[0]->add_child(frame[2]);
 
-  //spokes in gear
+  gear[1] = new HNode(NULL);
+  gear[1]->obj_type=2;
+  gear[1]->change_parameters(15,0,2,0,0,0);
+  gear[1]->set_color(0.6, 0.6, 0.6);
+  gear[1]->inRadius=inner_gear_radius;
+  gear[1]->outRadius=inner_gear_radius;
+  gear[1]->nsides=10;
+  gear[1]->rings=50;
+  node[0]->add_child(gear[1]);
 
+  // spokes in gear
+  cout<<"outer gear radius "<<outer_gear_inRadius<<endl;
+  cout<<"printing spokes cordinates : "<<endl;
+  for(int i=0;i<5;i++){
+    gear_spokes[i] = new HNode(NULL);
+    gear_spokes[i]->obj_type=3;
+    gear_spokes[i]->triangle_x1=(6.5 - outer_gear_inRadius)*(cos(0.31416 + (1.26*i)));
+    cout<<(15+((6.5 - outer_gear_inRadius)*(cos(0.31416 + (1.26*i)))))<<endl;
+    gear_spokes[i]->triangle_y1=(6.5 - outer_gear_inRadius)*(sin(0.31416 + (1.26*i)));
+    gear_spokes[i]->triangle_x2 = 1.5*(sin(1.26*(i+2)));
+    gear_spokes[i]->triangle_y2 = -(1.5*(cos(1.26*(i+2))));
+    gear_spokes[i]->change_parameters((1.5*(sin(1.26*(i+1)))),(-(1.5*(cos(1.26*(i+1))))),1,0,0,0);
+    gear_spokes[i]->set_color(0.6, 0.6, 0.6);
+    gear[0]->add_child(gear_spokes[i]);
+    gear[1]->add_child(gear_spokes[i]);
+  }
+
+  //pedals
+  //pedal rods
+  pedal_rod[0] = new HNode(NULL);
+  pedal_rod[0]->obj_type=0;
+  pedal_rod[0]->base=1;
+  pedal_rod[0]->top=1;
+  pedal_rod[0]->height=15;
+  pedal_rod[0]->slices=50;
+  pedal_rod[0]->stacks=10;
+  pedal_rod[0]->change_parameters(10, 10, -5, -90, -135, 0);
+  pedal_rod[0]->set_color(0.5,0.5,0.5);
+  gear[0]->add_child(pedal_rod[0]);
+
+  pedal_rod[1] = new HNode(NULL);
+  pedal_rod[1]->obj_type=0;
+  pedal_rod[1]->base=1;
+  pedal_rod[1]->top=1;
+  pedal_rod[1]->height=15;
+  pedal_rod[1]->slices=50;
+  pedal_rod[1]->stacks=10;
+  pedal_rod[1]->change_parameters(-10, -10, 2, -90, 45, 0);
+  pedal_rod[1]->set_color(0.5,0.5,0.5);
+  gear[0]->add_child(pedal_rod[1]);
+
+  //pedal cuboids
+  pedal_cuboid[0] = new HNode(NULL);
+  pedal_cuboid[0]->obj_type=1;
+  pedal_cuboid[0]->cuboid_breadth=7;
+  pedal_cuboid[0]->cuboid_height=4;
+  pedal_cuboid[0]->cuboid_length=3.5;
+  pedal_cuboid[0]->set_color(0.3,0.3,0.3);
+  pedal_cuboid[0]->change_parameters(-3,0,-5,0,35,0);
+  pedal_rod[0]->add_child(pedal_cuboid[0]);       //backside pedal
+
+  pedal_cuboid[1] = new HNode(NULL);
+  pedal_cuboid[1]->obj_type=1;
+  pedal_cuboid[1]->cuboid_breadth=7;
+  pedal_cuboid[1]->cuboid_height=4;
+  pedal_cuboid[1]->cuboid_length=3.5;
+  pedal_cuboid[1]->set_color(0.3,0.3,0.3);
+  pedal_cuboid[1]->change_parameters(-5,-5,-5,0,35,0);
+  pedal_rod[1]->add_child(pedal_cuboid[1]);       //frontside pedal
 
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
