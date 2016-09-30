@@ -34,7 +34,7 @@ HNode *handle_connect_with_frame, *handle_connect_front_wheel_across,
       *handle_connect_front_wheel_left, *handle_connect_front_wheel_right,
       *handlebar_connector, *handlebar_connector_across, *handlebar_left, *handlebar_right;
 
-//static variables
+  //static variables
   float wheel_outer_radius = 24;
   float wheel_tyre_radius = 1;
   float bar_radius = 2;
@@ -61,7 +61,7 @@ HNode *handle_connect_with_frame, *handle_connect_front_wheel_across,
   float axle_length = 8;
   float across_gear_length = 4;
 
-//dynamic variables  
+  //dynamic variables  
   float handle_rotation = 0;
   float wheel_rotation = 0;
 
@@ -132,44 +132,6 @@ void processNormalKeys(unsigned char key, int x, int y) {
   exit(0);
 }
 
-//Our function for processing Non-ASCII keys
-void processSpecialKeys(int key, int x, int y) {
-  switch(key) {
-    case GLUT_KEY_LEFT :
-    //node[curr]->dec_ry();
-    frame[4]->dec_tx();
-    // node[0]->dec_rx();
-    break;
-    case GLUT_KEY_RIGHT :
-    //node[curr]->inc_ry();
-    frame[4]->inc_tx();
-    // node[0]->inc_rx();
-    break;
-    case GLUT_KEY_UP :
-    //node[curr]->dec_rx();
-    frame[4]->inc_ty();
-    // node[0]->inc_ry();
-    break;
-    case GLUT_KEY_DOWN :
-    // node[curr]->inc_rx();
-    frame[4]->dec_ty();
-    // node[0]->dec_ry();
-    break;
-    case GLUT_KEY_PAGE_UP :
-    //node[curr]->dec_rz();
-    frame[2]->inc_ry();
-    // node[0]->inc_tz();
-    break;
-    case GLUT_KEY_PAGE_DOWN :
-    //node[curr]->inc_rz();
-    frame[2]->dec_ry();
-    // node[0]->dec_tz();
-    break;
-  }
-  //Redraw
-  glutPostRedisplay();
-}
-
 void display(void){
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -194,7 +156,7 @@ void init(void){
 int main(int argc, char **argv)
 {
 
-// of the first node - vetical cylinder containing the front handle
+  // of the first node - vetical cylinder containing the front handle
   node[0] = new HNode(NULL);
   
   frame[0] = new HNode(NULL);
@@ -230,7 +192,7 @@ int main(int argc, char **argv)
   wheel_front->add_child(wheel_axis_f);
   wheel_back->add_child(wheel_axis_b);
 
-//handle
+  //handle
   handle_connect_with_frame = new HNode(NULL);
   node[0]->add_child(handle_connect_with_frame);
 
@@ -251,7 +213,7 @@ int main(int argc, char **argv)
   handlebar_connector_across->add_child(handlebar_left);
   handlebar_connector_across->add_child(handlebar_right);
 
-//front wheel...this is child of handle_with_wheel_across!
+  //front wheel...this is child of handle_with_wheel_across!
   wheel_front->obj_type = 2;
   wheel_front->inRadius=wheel_tyre_radius;
   wheel_front->outRadius=wheel_outer_radius;
@@ -259,7 +221,7 @@ int main(int argc, char **argv)
   wheel_front->rings=50;
   wheel_front->change_parameters(0,-26.5, handle_connect_front_wheel_across_length/2, 0, 0, 0);
 
-//back wheel...this is child of nothing as of now
+  //back wheel...this is child of nothing as of now
   wheel_back->obj_type = 2;
   wheel_back->inRadius=wheel_tyre_radius;
   wheel_back->outRadius=wheel_outer_radius;
@@ -267,90 +229,90 @@ int main(int argc, char **argv)
   wheel_back->rings=50;
   wheel_back->change_parameters(50, 0, 0, 0, 0, 0);
 
-//the spokes
-for(int i=0; i<9; i++){
-  spoke_front[i]->obj_type = 0;
-  spoke_front[i]->base=spoke_radius;
-  spoke_front[i]->top=spoke_radius;
-  spoke_front[i]->height=spoke_length;
-  spoke_front[i]->slices=50;
-  spoke_front[i]->stacks=10;
-  spoke_front[i]->change_preparameters(2,0,0);
-  spoke_front[i]->change_parameters(0,0,0,90,40*i,0);
-  spoke_front[i]->set_color(0.6,0.6,0.6);             //silverish color
+  //the spokes
+  for(int i=0; i<9; i++){
+    spoke_front[i]->obj_type = 0;
+    spoke_front[i]->base=spoke_radius;
+    spoke_front[i]->top=spoke_radius;
+    spoke_front[i]->height=spoke_length;
+    spoke_front[i]->slices=50;
+    spoke_front[i]->stacks=10;
+    spoke_front[i]->change_preparameters(2,0,0);
+    spoke_front[i]->change_parameters(0,0,0,90,40*i,0);
+    spoke_front[i]->set_color(0.6,0.6,0.6);             //silverish color
 
-  spoke_front_extra[i]->obj_type = 0;
-  spoke_front_extra[i]->base=extra_spoke_radius;
-  spoke_front_extra[i]->top=extra_spoke_radius;
-  spoke_front_extra[i]->height=extra_spoke_length;
-  spoke_front_extra[i]->slices=50;
-  spoke_front_extra[i]->stacks=10;
-  //spoke_front_extra[i]->change_preparameters(2,0,0);
-  spoke_front_extra[i]->change_parameters(0,0,21,0,0,0);
-  spoke_front_extra[i]->set_color(0.855,0.647,0.125);       //goldenrod color
+    spoke_front_extra[i]->obj_type = 0;
+    spoke_front_extra[i]->base=extra_spoke_radius;
+    spoke_front_extra[i]->top=extra_spoke_radius;
+    spoke_front_extra[i]->height=extra_spoke_length;
+    spoke_front_extra[i]->slices=50;
+    spoke_front_extra[i]->stacks=10;
+    //spoke_front_extra[i]->change_preparameters(2,0,0);
+    spoke_front_extra[i]->change_parameters(0,0,21,0,0,0);
+    spoke_front_extra[i]->set_color(0.855,0.647,0.125);       //goldenrod color
 
-  spoke_back[i]->obj_type = 0;
-  spoke_back[i]->base=spoke_radius;
-  spoke_back[i]->top=spoke_radius;
-  spoke_back[i]->height=spoke_length;
-  spoke_back[i]->slices=50;
-  spoke_back[i]->stacks=10;
-  spoke_back[i]->change_preparameters(2,0,0);
-  spoke_back[i]->change_parameters(0,0,0,90,40*i,0);
-  spoke_back[i]->set_color(0.6,0.6,0.6);
+    spoke_back[i]->obj_type = 0;
+    spoke_back[i]->base=spoke_radius;
+    spoke_back[i]->top=spoke_radius;
+    spoke_back[i]->height=spoke_length;
+    spoke_back[i]->slices=50;
+    spoke_back[i]->stacks=10;
+    spoke_back[i]->change_preparameters(2,0,0);
+    spoke_back[i]->change_parameters(0,0,0,90,40*i,0);
+    spoke_back[i]->set_color(0.6,0.6,0.6);
 
-  spoke_back_extra[i]->obj_type = 0;
-  spoke_back_extra[i]->base=extra_spoke_radius;
-  spoke_back_extra[i]->top=extra_spoke_radius;
-  spoke_back_extra[i]->height=extra_spoke_length;
-  spoke_back_extra[i]->slices=50;
-  spoke_back_extra[i]->stacks=10;
-  //spoke_back_extra[i]->change_preparameters(2,0,0);
-  spoke_back_extra[i]->change_parameters(0,0,21,0,0,0);
-  spoke_back_extra[i]->set_color(0.855,0.647,0.125);
+    spoke_back_extra[i]->obj_type = 0;
+    spoke_back_extra[i]->base=extra_spoke_radius;
+    spoke_back_extra[i]->top=extra_spoke_radius;
+    spoke_back_extra[i]->height=extra_spoke_length;
+    spoke_back_extra[i]->slices=50;
+    spoke_back_extra[i]->stacks=10;
+    //spoke_back_extra[i]->change_preparameters(2,0,0);
+    spoke_back_extra[i]->change_parameters(0,0,21,0,0,0);
+    spoke_back_extra[i]->set_color(0.855,0.647,0.125);
 
-  spoke_front2[i]->obj_type = 0;
-  spoke_front2[i]->base=spoke_radius;
-  spoke_front2[i]->top=spoke_radius;
-  spoke_front2[i]->height=spoke_length;
-  spoke_front2[i]->slices=50;
-  spoke_front2[i]->stacks=10;
-  spoke_front2[i]->change_preparameters(-2,0,0);
-  spoke_front2[i]->change_parameters(0,0,0,90,40*i-10,0);
-  spoke_front2[i]->set_color(0.6,0.6,0.6);
+    spoke_front2[i]->obj_type = 0;
+    spoke_front2[i]->base=spoke_radius;
+    spoke_front2[i]->top=spoke_radius;
+    spoke_front2[i]->height=spoke_length;
+    spoke_front2[i]->slices=50;
+    spoke_front2[i]->stacks=10;
+    spoke_front2[i]->change_preparameters(-2,0,0);
+    spoke_front2[i]->change_parameters(0,0,0,90,40*i-10,0);
+    spoke_front2[i]->set_color(0.6,0.6,0.6);
 
-  spoke_front2_extra[i]->obj_type = 0;
-  spoke_front2_extra[i]->base=extra_spoke_radius;
-  spoke_front2_extra[i]->top=extra_spoke_radius;
-  spoke_front2_extra[i]->height=extra_spoke_length;
-  spoke_front2_extra[i]->slices=50;
-  spoke_front2_extra[i]->stacks=10;
-  //spoke_front2_extra[i]->change_preparameters(2,0,0);
-  spoke_front2_extra[i]->change_parameters(0,0,21,0,0,0);
-  spoke_front2_extra[i]->set_color(0.855,0.647,0.125);
+    spoke_front2_extra[i]->obj_type = 0;
+    spoke_front2_extra[i]->base=extra_spoke_radius;
+    spoke_front2_extra[i]->top=extra_spoke_radius;
+    spoke_front2_extra[i]->height=extra_spoke_length;
+    spoke_front2_extra[i]->slices=50;
+    spoke_front2_extra[i]->stacks=10;
+    //spoke_front2_extra[i]->change_preparameters(2,0,0);
+    spoke_front2_extra[i]->change_parameters(0,0,21,0,0,0);
+    spoke_front2_extra[i]->set_color(0.855,0.647,0.125);
 
-  spoke_back2[i]->obj_type = 0;
-  spoke_back2[i]->base=spoke_radius;
-  spoke_back2[i]->top=spoke_radius;
-  spoke_back2[i]->height=spoke_length;
-  spoke_back2[i]->slices=50;
-  spoke_back2[i]->stacks=10;
-  spoke_back2[i]->change_preparameters(-2,0,0);
-  spoke_back2[i]->change_parameters(0,0,0,90,40*i-10,0);
-  spoke_back2[i]->set_color(0.6,0.6,0.6);
+    spoke_back2[i]->obj_type = 0;
+    spoke_back2[i]->base=spoke_radius;
+    spoke_back2[i]->top=spoke_radius;
+    spoke_back2[i]->height=spoke_length;
+    spoke_back2[i]->slices=50;
+    spoke_back2[i]->stacks=10;
+    spoke_back2[i]->change_preparameters(-2,0,0);
+    spoke_back2[i]->change_parameters(0,0,0,90,40*i-10,0);
+    spoke_back2[i]->set_color(0.6,0.6,0.6);
 
-  spoke_back2_extra[i]->obj_type = 0;
-  spoke_back2_extra[i]->base=extra_spoke_radius;
-  spoke_back2_extra[i]->top=extra_spoke_radius;
-  spoke_back2_extra[i]->height=extra_spoke_length;
-  spoke_back2_extra[i]->slices=50;
-  spoke_back2_extra[i]->stacks=10;
-  //spoke_back2_extra[i]->change_preparameters(2,0,0);
-  spoke_back2_extra[i]->change_parameters(0,0,21,0,0,0);
-  spoke_back2_extra[i]->set_color(0.855,0.647,0.125);
-}
+    spoke_back2_extra[i]->obj_type = 0;
+    spoke_back2_extra[i]->base=extra_spoke_radius;
+    spoke_back2_extra[i]->top=extra_spoke_radius;
+    spoke_back2_extra[i]->height=extra_spoke_length;
+    spoke_back2_extra[i]->slices=50;
+    spoke_back2_extra[i]->stacks=10;
+    //spoke_back2_extra[i]->change_preparameters(2,0,0);
+    spoke_back2_extra[i]->change_parameters(0,0,21,0,0,0);
+    spoke_back2_extra[i]->set_color(0.855,0.647,0.125);
+  }
 
-//the wheel axes
+  //the wheel axes
   wheel_axis_f->obj_type=0;
   wheel_axis_f->base=bar_radius;
   wheel_axis_f->top=bar_radius;
@@ -367,7 +329,7 @@ for(int i=0; i<9; i++){
   wheel_axis_b->stacks=10;
   wheel_axis_b->change_parameters(0,0,-wheel_axis_length/2,0,0,0);
 
-//handle of the cycle
+  //handle of the cycle
   handle_connect_with_frame->obj_type=0;
   handle_connect_with_frame->base=bar_radius;
   handle_connect_with_frame->top=bar_radius;
@@ -432,7 +394,6 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_left->slices=50;
   handle_connect_front_wheel_left->stacks=10;
   handle_connect_front_wheel_left->change_parameters(0,0,handle_connect_front_wheel_across->height,90,0,0);
-  // handle_connect_front_wheel_left->set_color(0,1,0); 
   handle_connect_front_wheel_left->set_color(0.5,0.5,0.5); 
 
   handle_connect_front_wheel_right->obj_type=0;
@@ -442,30 +403,12 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_right->slices=50;
   handle_connect_front_wheel_right->stacks=10;
   handle_connect_front_wheel_right->change_parameters(0,0,0,90,0,0);
-  // handle_connect_front_wheel_right->set_color(0,1,0);   
-  handle_connect_front_wheel_right->set_color(0.5,0.5,0.5);   
+  handle_connect_front_wheel_right->set_color(0.5,0.5,0.5);
 
-//trial nodes
-  // HNode *cylin = new HNode(NULL);
-  // node[0]->add_child(cylin);
-  // cylin->obj_type = 0;
-  // cylin->base=0.5;
-  // cylin->top=0.5;
-  // cylin->height=22;
-  // cylin->slices=50;
-  // cylin->stacks=10;
-  // //cylin->change_preparameters(1,-3,0);
-  // cylin->change_parameters(0,0,0,0,0,0);
-
-  //Child Nodes
-  // frame[0] = new HNode(node[0],36,v_positions,v_colors);
-  // frame[0]->change_parameters(2.0,0.0,0.0,0.0,0.0,0.0);
-  // wheel_front = new HNode(frame[0],36,v_positions,v_colors);
-  // wheel_front->change_parameters(2.0,0.0,0.0,0.0,0.0,0.0);
 
   /********the main frame****************/
 
-//frame[0] = frame_upper_horizontal
+  //frame[0] = frame_upper_horizontal
   frame[0]-> obj_type=0;
   frame[0]->base=bar_radius;
   frame[0]->top=bar_radius;
@@ -519,7 +462,6 @@ for(int i=0; i<9; i++){
   axle->top=bar_radius;
   axle->height=axle_length;
   axle->change_preparameters(0,14,-axle_length/2);
-  // axle->change_preparameters(35,0,0);
   axle->change_parameters(0,0,0,90,0,0);
   axle->set_color(0,0,0);
   frame[3]->add_child(axle);
@@ -565,7 +507,7 @@ for(int i=0; i<9; i++){
   seat[1]->set_color(0,0,0);
   node[0]->add_child(seat[1]);
 
-//gear
+  //gear
   gear[0] = new HNode(NULL);
   gear[0]->obj_type=2;
   gear[0]->change_parameters(15,0,2+2.5,0,0,0);
@@ -587,14 +529,11 @@ for(int i=0; i<9; i++){
   gear[1]->rings=50;
   gear[0]->add_child(gear[1]);
 
-// spokes in gear
-  //cout<<"outer gear radius "<<outer_gear_inRadius<<endl;
-  //cout<<"printing spokes cordinates : "<<endl;
+  // spokes in gear
   for(int i=0;i<5;i++){
     gear_spokes[i] = new HNode(NULL);
     gear_spokes[i]->obj_type=3;
     gear_spokes[i]->triangle_x1=(6.5 - outer_gear_inRadius)*(cos(0.31416 + (1.26*i)));
-    //cout<<(15+((6.5 - outer_gear_inRadius)*(cos(0.31416 + (1.26*i)))))<<endl;
     gear_spokes[i]->triangle_y1=(6.5 - outer_gear_inRadius)*(sin(0.31416 + (1.26*i)));
     gear_spokes[i]->triangle_x2 = 1.5*(sin(1.26*(i+2)));
     gear_spokes[i]->triangle_y2 = -(1.5*(cos(1.26*(i+2))));
@@ -603,7 +542,7 @@ for(int i=0; i<9; i++){
     gear[0]->add_child(gear_spokes[i]);
   }
 
-//pedals
+  //pedals
   //pedal rods
   pedal_rod_across = new HNode(NULL);
   pedal_rod_across->obj_type=0;
@@ -638,7 +577,7 @@ for(int i=0; i<9; i++){
   pedal_rod[1]->set_color(0.5,0.5,0.5);
   pedal_rod_across->add_child(pedal_rod[1]);
 
-//pedal cuboids
+  //pedal cuboids
   pedal_cuboid[0] = new HNode(NULL);
   pedal_cuboid[0]->obj_type=1;
   pedal_cuboid[0]->cuboid_breadth=7;
@@ -690,27 +629,13 @@ for(int i=0; i<9; i++){
   frame[7]->set_color(1,0,0);
   node[0]->add_child(frame[7]);
 
-  // frame[4] = new HNode(NULL);
-  // frame[4]->obj_type=0;
-  // frame[4]->base=bar_radius;
-  // frame[4]->top=bar_radius;
-  // frame[4]->height=frame_lower_right_horizontal_len;
-  // frame[4]->slices=50;
-  // frame[4]->stacks=10;
-  // frame[4]->change_parameters(16,0,0,-90,90,0);
-  // frame[4]->set_color(1,0,0);
-  // node[0]->add_child(frame[4]);
-
-//
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(512,512);
   glutCreateWindow("Hierarchical Modeling");
   glutDisplayFunc(display);
   glutKeyboardFunc(processNormalKeys);
-  glutSpecialFunc(processSpecialKeys);
   init();
   glutMainLoop();
   return 0;
-
 }
