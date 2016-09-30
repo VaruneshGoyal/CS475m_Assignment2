@@ -28,8 +28,10 @@ HNode::HNode(HNode* par){
   base = inRadius = 0;
   top = outRadius = 0;
   height = 0;
-  slices = nsides = 0;
-  stacks = rings = 0;
+  slices = 50;
+  nsides = 0;
+  stacks = 10;
+  rings = 0;
   cuboid_height = cuboid_length = cuboid_breadth = 0;
   triangle_x1, triangle_y1, triangle_x2, triangle_y2 = 0;
 }

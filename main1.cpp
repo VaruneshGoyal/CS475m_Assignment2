@@ -8,7 +8,7 @@ using namespace std;
 
 
 HNode *node[10];
-HNode *frame[5];
+HNode *frame[8];
 HNode *wheel_front;
 HNode *wheel_back;
 HNode *spoke_front[9];
@@ -25,6 +25,8 @@ HNode *gear[2];
 HNode *gear_spokes[5];
 HNode *seat[2];
 HNode *pedal_rod[2];
+HNode *axle;
+HNode *across_gear;
 
 
 HNode *handle_connect_with_frame, *handle_connect_front_wheel_across, 
@@ -54,6 +56,9 @@ HNode *handle_connect_with_frame, *handle_connect_front_wheel_across,
   float frame_lower_right_horizontal_len = 35;
   float outer_gear_inRadius = 1;
   float inner_gear_radius = 1.5;
+
+  float axle_length = 8;
+  float across_gear_length = 4;
 
 //dynamic variables  
   float handle_rotation = 0;
@@ -499,26 +504,46 @@ for(int i=0; i<9; i++){
   frame[3]->obj_type=0;
   frame[3]->base=bar_radius;
   frame[3]->top=bar_radius;
-  frame[3]->height=frame_upper_right_horizontal_len;
+  frame[3]->height=frame_upper_right_horizontal_len*3/8;
   frame[3]->slices=50;
   frame[3]->stacks=10;
   frame[3]->change_parameters(22,28,0,-90,135,0);
   frame[3]->set_color(1,0,0);
   node[0]->add_child(frame[3]);
 
-  //frame lower right horizontal
+  //axle
+  axle = new HNode(NULL);
+  axle->obj_type=0;
+  axle->base=bar_radius;
+  axle->top=bar_radius;
+  axle->height=axle_length;
+  axle->change_preparameters(0,14,-axle_length/2);
+  // axle->change_preparameters(35,0,0);
+  axle->change_parameters(0,0,0,90,0,0);
+  axle->set_color(0,0,0);
+  frame[3]->add_child(axle);
+
+  //rear wheel front upper
   frame[4] = new HNode(NULL);
   frame[4]->obj_type=0;
   frame[4]->base=bar_radius;
   frame[4]->top=bar_radius;
-  frame[4]->height=frame_lower_right_horizontal_len;
-  frame[4]->slices=50;
-  frame[4]->stacks=10;
-  frame[4]->change_parameters(16,0,0,-90,90,0);
-  frame[4]->set_color(1,0,0);
-  node[0]->add_child(frame[4]);
+  frame[4]->height=(frame_upper_right_horizontal_len)*5/8;
+  frame[4]->change_parameters(0,0,axle_length,-90,0,0);
+  frame[4]->set_color(0.7,0.7,0.7);
+  axle->add_child(frame[4]);
 
-//seat
+  //rear wheel back upper
+  frame[5] = new HNode(NULL);
+  frame[5]->obj_type=0;
+  frame[5]->base=bar_radius;
+  frame[5]->top=bar_radius;
+  frame[5]->height=(frame_upper_right_horizontal_len)*5/8;
+  frame[5]->change_parameters(0,0,0,-90,0,0);
+  frame[5]->set_color(0.5,0.5,0.5);
+  axle->add_child(frame[5]);
+
+  //seat
   seat[0] = new HNode(NULL);
   seat[0]->obj_type=3;
   seat[0]->triangle_x1=30;
@@ -621,6 +646,48 @@ for(int i=0; i<9; i++){
   pedal_cuboid[1]->change_preparameters(-pedal_cuboid[1]->cuboid_length/2,0,-pedal_cuboid[1]->cuboid_breadth/2);
   pedal_cuboid[1]->change_parameters(0,-pedal_cuboid[1]->cuboid_height - 1,0,0,45-gear[0]->rz,0);
   pedal_rod[1]->add_child(pedal_cuboid[1]);       //frontside pedal
+
+  // //rod across gear
+  // across_gear = new HNode(NULL);
+  // across_gear->obj_type=0;
+  // across_gear->base=bar_radius;
+  // across_gear->top=bar_radius;
+  // across_gear->height=across_gear_length;
+  // across_gear->change_parameters(0,0,-2,0,0,0);
+  // across_gear->set_color(0.3,0.3,0.3);
+  // gear[1]->add_child(across_gear);
+  // wheel_axis_f->change_parameters(0,0,-wheel_axis_length/2,0,0,0);
+
+  //frame lower right horizontal -- front
+  frame[6] = new HNode(NULL);
+  frame[6]->obj_type=0;
+  frame[6]->base=bar_radius;
+  frame[6]->top=bar_radius;
+  frame[6]->height=frame_lower_right_horizontal_len;
+  frame[6]->change_parameters(15,0,across_gear_length,-90,90,0);
+  frame[6]->set_color(1,0,0);
+  node[0]->add_child(frame[6]);
+
+  //frame lower right horizontal -- back
+  frame[7] = new HNode(NULL);
+  frame[7]->obj_type=0;
+  frame[7]->base=bar_radius;
+  frame[7]->top=bar_radius;
+  frame[7]->height=frame_lower_right_horizontal_len;
+  frame[7]->change_parameters(15,0,-across_gear_length,-90,90,0);
+  frame[7]->set_color(1,0,0);
+  node[0]->add_child(frame[7]);
+
+  // frame[4] = new HNode(NULL);
+  // frame[4]->obj_type=0;
+  // frame[4]->base=bar_radius;
+  // frame[4]->top=bar_radius;
+  // frame[4]->height=frame_lower_right_horizontal_len;
+  // frame[4]->slices=50;
+  // frame[4]->stacks=10;
+  // frame[4]->change_parameters(16,0,0,-90,90,0);
+  // frame[4]->set_color(1,0,0);
+  // node[0]->add_child(frame[4]);
 
 //
   glutInit(&argc, argv);
