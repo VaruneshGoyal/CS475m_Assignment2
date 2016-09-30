@@ -5,6 +5,7 @@ H to rotate handle in aniclockwise direction
 h to rotate handle in clockwise direction
 F to turn the wheels forward
 B to turn the wheels backward
+P/p to turn the peddles
 X to rotate the whole system clockwise (seen towards positive x) about x axis
 x to rotate the whole system anti-clockwise (seen towards positive x) about x axis
 Y to rotate the whole system clockwise (seen towards positive y) about y axis
