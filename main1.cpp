@@ -25,6 +25,7 @@ HNode *gear[2];
 HNode *gear_spokes[5];
 HNode *seat[2];
 HNode *pedal_rod[2];
+HNode *pedal_rod_across;
 HNode *axle;
 HNode *across_gear;
 
@@ -117,13 +118,13 @@ void processNormalKeys(unsigned char key, int x, int y) {
     case 'P':
       gear[0]->rz++;
       pedal_cuboid[0]->change_parameters(0,1,0,0,45+gear[0]->rz,0);
-      pedal_cuboid[1]->change_parameters(0,1,0,0,45+gear[0]->rz,0);
+      pedal_cuboid[1]->change_parameters(0,-pedal_cuboid[1]->cuboid_height - 1,0,0,45+gear[0]->rz,0);
       glutPostRedisplay();
       break;
     case 'p':
       gear[0]->rz--;
       pedal_cuboid[0]->change_parameters(0,1,0,0,45+gear[0]->rz,0);
-      pedal_cuboid[1]->change_parameters(0,1,0,0,45+gear[0]->rz,0);
+      pedal_cuboid[1]->change_parameters(0,-pedal_cuboid[1]->cuboid_height - 1,0,0,45+gear[0]->rz,0);
       glutPostRedisplay();
       break;
   }
@@ -432,7 +433,7 @@ for(int i=0; i<9; i++){
   handle_connect_front_wheel_left->stacks=10;
   handle_connect_front_wheel_left->change_parameters(0,0,handle_connect_front_wheel_across->height,90,0,0);
   // handle_connect_front_wheel_left->set_color(0,1,0); 
-  handle_connect_front_wheel_left->set_color(0.7,0.7,0.7); 
+  handle_connect_front_wheel_left->set_color(0.5,0.5,0.5); 
 
   handle_connect_front_wheel_right->obj_type=0;
   handle_connect_front_wheel_right->base=bar_radius;
@@ -530,7 +531,7 @@ for(int i=0; i<9; i++){
   frame[4]->top=bar_radius;
   frame[4]->height=(frame_upper_right_horizontal_len)*5/8;
   frame[4]->change_parameters(0,0,axle_length,-90,0,0);
-  frame[4]->set_color(0.7,0.7,0.7);
+  frame[4]->set_color(0.5,0.5,0.5);
   axle->add_child(frame[4]);
 
   //rear wheel back upper
@@ -567,7 +568,7 @@ for(int i=0; i<9; i++){
 //gear
   gear[0] = new HNode(NULL);
   gear[0]->obj_type=2;
-  gear[0]->change_parameters(15,0,2,0,0,0);
+  gear[0]->change_parameters(15,0,2+2.5,0,0,0);
   gear[0]->inRadius=outer_gear_inRadius;
   gear[0]->outRadius=6.5;
   gear[0]->nsides=10;
@@ -604,6 +605,17 @@ for(int i=0; i<9; i++){
 
 //pedals
   //pedal rods
+  pedal_rod_across = new HNode(NULL);
+  pedal_rod_across->obj_type=0;
+  pedal_rod_across->base=1;
+  pedal_rod_across->top=1;
+  pedal_rod_across->height=13;
+  pedal_rod_across->slices=50;
+  pedal_rod_across->stacks=10;
+  pedal_rod_across->change_parameters(0, 0, -11, 0, 0, 0);
+  pedal_rod_across->set_color(0.5,0.5,0.5);
+  gear[0]->add_child(pedal_rod_across);
+
   pedal_rod[0] = new HNode(NULL);
   pedal_rod[0]->obj_type=0;
   pedal_rod[0]->base=1;
@@ -611,9 +623,9 @@ for(int i=0; i<9; i++){
   pedal_rod[0]->height=15;
   pedal_rod[0]->slices=50;
   pedal_rod[0]->stacks=10;
-  pedal_rod[0]->change_parameters(10, 10, -5, -90, -135, 0);
+  pedal_rod[0]->change_parameters(10, 10, 0, -90, -135, 0);
   pedal_rod[0]->set_color(0.5,0.5,0.5);
-  gear[0]->add_child(pedal_rod[0]);
+  pedal_rod_across->add_child(pedal_rod[0]);
 
   pedal_rod[1] = new HNode(NULL);
   pedal_rod[1]->obj_type=0;
@@ -622,9 +634,9 @@ for(int i=0; i<9; i++){
   pedal_rod[1]->height=15;
   pedal_rod[1]->slices=50;
   pedal_rod[1]->stacks=10;
-  pedal_rod[1]->change_parameters(-10, -10, 2, -90, 45, 0);
+  pedal_rod[1]->change_parameters(-10, -10, 13, -90, 45, 0);
   pedal_rod[1]->set_color(0.5,0.5,0.5);
-  gear[0]->add_child(pedal_rod[1]);
+  pedal_rod_across->add_child(pedal_rod[1]);
 
 //pedal cuboids
   pedal_cuboid[0] = new HNode(NULL);
@@ -661,20 +673,20 @@ for(int i=0; i<9; i++){
   //frame lower right horizontal -- front
   frame[6] = new HNode(NULL);
   frame[6]->obj_type=0;
-  frame[6]->base=bar_radius;
+  frame[6]->base=bar_radius/2;
   frame[6]->top=bar_radius;
   frame[6]->height=frame_lower_right_horizontal_len;
-  frame[6]->change_parameters(15,0,across_gear_length,-90,90,0);
+  frame[6]->change_parameters(15,0,across_gear_length-bar_radius,0,90-4,0);
   frame[6]->set_color(1,0,0);
   node[0]->add_child(frame[6]);
 
   //frame lower right horizontal -- back
   frame[7] = new HNode(NULL);
   frame[7]->obj_type=0;
-  frame[7]->base=bar_radius;
+  frame[7]->base=bar_radius/2;
   frame[7]->top=bar_radius;
   frame[7]->height=frame_lower_right_horizontal_len;
-  frame[7]->change_parameters(15,0,-across_gear_length,-90,90,0);
+  frame[7]->change_parameters(15,0,-across_gear_length+bar_radius,0,90+4,0);
   frame[7]->set_color(1,0,0);
   node[0]->add_child(frame[7]);
 
